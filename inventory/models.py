@@ -1,5 +1,12 @@
 from django.db import models
 
+#Category model to categorize products
+class Category(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    description = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.name
 
 class Product(models.Model):
     name = models.CharField(max_length=200)
@@ -7,7 +14,7 @@ class Product(models.Model):
     category = models.ForeignKey(
         Category,
         on_delete=models.CASCADE,
-        related_name="products"
+        related_name="products",
     )
 
     sku = models.CharField(
@@ -55,10 +62,3 @@ class Product(models.Model):
         return self.name
 
 
-#Category model to categorize products
-class Category(models.Model):
-    name = models.CharField(max_length=100, unique=True)
-    description = models.TextField(blank=True)
-
-    def __str__(self):
-        return self.name
