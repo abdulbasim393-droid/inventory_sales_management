@@ -1,35 +1,32 @@
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
+
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from .models import Product
 from .serializers import ProductSerializer
+
+from rest_framework.generics import RetrieveUpdateDestroyAPIView
+from rest_framework.generics import ListCreateAPIView
+
 
 
 
 # Product List View, Create Product
-@api_view(["GET", "POST"])
-def product_list(request):
+class ProductList(ListCreateAPIView):
 
-    if request.method == "GET":
-        products = Product.objects.all()
-        serializer = ProductSerializer(products, many=True)
-        return Response(serializer.data)
+    queryset = Product.objects.all()
 
-    elif request.method == "POST":
-        serializer = ProductSerializer(data=request.data)
-
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=201)
-
-        return Response(serializer.errors, status=400)
+    serializer_class = ProductSerializer
 
 
-# View Specific Product
-@api_view(["GET"])
-def product_detail(request, id):
-    product = get_object_or_404(Product, id=id)
 
-    serializer = ProductSerializer(product)
+# View Specific Product, Update Product
+class ProductDetail(RetrieveUpdateDestroyAPIView):
 
-    return Response(serializer.data)
+    queryset = Product.objects.all()
+
+    serializer_class = ProductSerializer
+
+    lookup_field = "id"
