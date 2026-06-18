@@ -2,8 +2,9 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import Product, Category, Supplier
+from .models import Product, Category, Supplier, Customer
 
 admin.site.register(Product)
 admin.site.register(Category)
 admin.site.register(Supplier)
+admin.site.register(Customer)

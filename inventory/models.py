@@ -1,5 +1,22 @@
 from django.db import models
 
+
+
+
+
+#Customer
+class Customer(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField(unique=True)
+    phone = models.CharField(max_length=20)
+    address = models.TextField(blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+    
+
 #Category model to categorize products
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -8,7 +25,7 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-
+#supplier
 class Supplier(models.Model):
     name = models.CharField(max_length=150, unique=True)
     contact_person = models.CharField(max_length=100, blank=True)
