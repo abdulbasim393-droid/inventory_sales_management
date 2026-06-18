@@ -8,6 +8,17 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+
+class Supplier(models.Model):
+    name = models.CharField(max_length=150, unique=True)
+    contact_person = models.CharField(max_length=100, blank=True)
+    email = models.EmailField(blank=True)
+    phone = models.CharField(max_length=20, blank=True)
+    address = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.name
+
 class Product(models.Model):
     name = models.CharField(max_length=200)
 
@@ -15,6 +26,15 @@ class Product(models.Model):
         Category,
         on_delete=models.CASCADE,
         related_name="products",
+    )
+
+
+    supplier = models.ForeignKey(
+        Supplier,
+        on_delete=models.CASCADE,
+        related_name="products",
+        null=True,
+        blank=True
     )
 
     sku = models.CharField(

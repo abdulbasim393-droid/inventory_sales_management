@@ -1,13 +1,36 @@
 from rest_framework import serializers
-from .models import Product, Category
+from .models import Product, Category, Supplier
 
+
+class ProductSummarySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ["id", "name"]
 
 
 
 class CategorySerializer(serializers.ModelSerializer):
+
+    products = ProductSummarySerializer(
+        many=True,
+        read_only=True
+    )
+
     class Meta:
         model = Category
         fields = '__all__'
+
+
+
+class SupplierSerializer(serializers.ModelSerializer):
+
+    products = ProductSummarySerializer(
+        many=True,
+        read_only=True
+    )
+    class Meta:
+        model = Supplier
+        fields = "__all__"
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -37,7 +60,11 @@ class ProductSerializer(serializers.ModelSerializer):
         if selling_price is not None and selling_price < 0:
             raise serializers.ValidationError("Selling price cannot be negative")
 
-        if cost_price and selling_price and selling_price < cost_price:
+        if (
+            cost_price is not None
+            and selling_price is not None
+            and selling_price < cost_price
+        ):
             raise serializers.ValidationError(
                 "Selling price cannot be lower than cost price"
             )
@@ -45,7 +72,7 @@ class ProductSerializer(serializers.ModelSerializer):
         return data
 
 
-
+    supplier_detail = SupplierSerializer(source="supplier",read_only=True)
     category_detail = CategorySerializer(source='category', read_only=True)
 
     class Meta:
@@ -64,4 +91,7 @@ class ProductSerializer(serializers.ModelSerializer):
             'updated_at',
             'category',
             'category_detail',
+            'supplier',
+            'supplier_detail',
+            
         ]
