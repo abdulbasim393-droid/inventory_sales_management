@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h2>Sales</h2>
+    <div class="box" style="display:flex; justify-content:space-between; align-items:center;">
+        <form method="get" style="margin:0;">
+            <input type="text" name="q" value="{{ query }}" placeholder="Search sales by product">
+            <button type="submit">Search</button>
+        </form>
+        {% if 'Admin' in user_roles or 'Manager' in user_roles or 'Sales Staff' in user_roles %}
+            <a href="{% url 'sale_add' %}" style="background:#2ecc71;">Record Sale</a>
+        {% endif %}
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Customer</th>
+                <th>Quantity</th>
+                <th>Selling price</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for sale in page_obj.object_list %}
+                <tr>
+                    <td>{{ sale.product }}</td>
+                    <td>{{ sale.customer }}</td>
+                    <td>{{ sale.quantity }}</td>
+                    <td>{{ sale.selling_price }}</td>
+                    <td>{{ sale.sale_date }}</td>
+                    <td>
+                        {% if 'Admin' in user_roles or 'Manager' in user_roles %}
+                            <a href="{% url 'sale_edit' sale.pk %}">Edit</a>
+                        {% endif %}
+                        {% if 'Admin' in user_roles %}
+                            <a href="{% url 'sale_delete' sale.pk %}" style="color:#c0392b; margin-left:12px;">Delete</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="6">No sales found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% if page_obj.has_other_pages %}
+        <div class="box" style="display:flex; justify-content:space-between;">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}&q={{ query }}">Previous</a>
+            {% endif %}
+            <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}&q={{ query }}">Next</a>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endblock %}

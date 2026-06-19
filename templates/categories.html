@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h2>Categories</h2>
+    <div class="box" style="display:flex; justify-content:space-between; align-items:center;">
+        <form method="get" style="margin:0;">
+            <input type="text" name="q" value="{{ query }}" placeholder="Search categories">
+            <button type="submit">Search</button>
+        </form>
+        {% if 'Admin' in user_roles %}
+            <a href="{% url 'category_add' %}" style="background:#2ecc71;">Add Category</a>
+        {% endif %}
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for category in page_obj.object_list %}
+                <tr>
+                    <td>{{ category.name }}</td>
+                    <td>{{ category.description }}</td>
+                    <td>
+                        {% if 'Admin' in user_roles %}
+                            <a href="{% url 'category_edit' category.pk %}">Edit</a>
+                            <a href="{% url 'category_delete' category.pk %}" style="color:#c0392b; margin-left:12px;">Delete</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="3">No categories found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% if page_obj.has_other_pages %}
+        <div class="box" style="display:flex; justify-content:space-between;">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}&q={{ query }}">Previous</a>
+            {% endif %}
+            <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}&q={{ query }}">Next</a>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endblock %}

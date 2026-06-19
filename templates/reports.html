@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h2>Reports</h2>
+    <div class="box">
+        <h3>Revenue by Category</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Revenue</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in revenue_by_category %}
+                    <tr>
+                        <td>{{ row.category__name }}</td>
+                        <td>{{ row.total_sales }}</td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="2">No data available.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

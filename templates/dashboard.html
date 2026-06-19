@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h2>Dashboard</h2>
+    <div class="box">
+        <p><strong>Total products:</strong> {{ total_products }}</p>
+        <p><strong>Total customers:</strong> {{ total_customers }}</p>
+        <p><strong>Total sales:</strong> {{ total_sales }}</p>
+        <p><strong>Total revenue:</strong> {{ total_revenue }}</p>
+        <p><strong>Low stock products:</strong> {{ low_stock_products }}</p>
+        <p><strong>Out of stock products:</strong> {{ out_of_stock_products }}</p>
+    </div>
+{% endblock %}

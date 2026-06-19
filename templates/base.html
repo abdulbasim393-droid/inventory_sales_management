@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stockflow Management</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f4f4f4; }
+        header { background: #2c3e50; color: white; padding: 16px 24px; }
+        header a { color: white; margin-right: 16px; text-decoration: none; }
+        .container { max-width: 1000px; margin: 32px auto; padding: 24px; background: white; box-shadow: 0 0 14px rgba(0,0,0,0.08); }
+        .box { padding: 18px; background: #ecf0f1; border-radius: 8px; margin-bottom: 18px; }
+        table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+        th, td { padding: 12px; border: 1px solid #ddd; text-align: left; }
+        th { background: #3498db; color: white; }
+        input, button { padding: 10px; font-size: 1rem; }
+        button { background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        .error { color: #c0392b; margin-bottom: 14px; }
+        nav a { margin-right: 14px; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 style="display:inline;">Stockflow</h1>
+        {% if user.is_authenticated %}
+            <span style="margin-left: 24px; color: #ecf0f1;">
+                Role: {{ user_roles|join:", " }}
+            </span>
+            <nav style="display:inline; margin-left: 24px;">
+                <a href="{% url 'dashboard_page' %}">Dashboard</a>
+                <a href="{% url 'products_page' %}">Products</a>
+                {% if 'Admin' in user_roles or 'Manager' in user_roles %}
+                    <a href="{% url 'categories_page' %}">Categories</a>
+                    <a href="{% url 'suppliers_page' %}">Suppliers</a>
+                {% endif %}
+                <a href="{% url 'customers_page' %}">Customers</a>
+                <a href="{% url 'sales_page' %}">Sales</a>
+                {% if 'Admin' in user_roles %}
+                    <a href="{% url 'users_page' %}">Users</a>
+                {% endif %}
+                {% if 'Admin' in user_roles or 'Manager' in user_roles %}
+                    <a href="{% url 'reports_page' %}">Reports</a>
+                {% endif %}
+                <a href="{% url 'logout' %}">Logout</a>
+            </nav>
+        {% endif %}
+    </header>
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
