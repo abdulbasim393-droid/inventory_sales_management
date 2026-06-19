@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Product, Category, Supplier, Customer, Sale
+from django.db import transaction
 
 
 class ProductSummarySerializer(serializers.ModelSerializer):
@@ -13,6 +14,23 @@ class SaleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sale
         fields = "__all__"
+
+    @transaction.atomic
+    def create(self, validated_data):
+        product = validated_data["product"]
+        quantity = validated_data["quantity"]
+
+        if product.quantity < quantity:
+            raise serializers.ValidationError(
+                "Not enough stock available."
+            )
+
+        product.quantity -= quantity
+        product.save()
+
+        sale = Sale.objects.create(**validated_data)
+
+        return sale
 
 
 class CustomerSerializer(serializers.ModelSerializer):

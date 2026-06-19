@@ -11,3 +11,7 @@ __pycache__/
 
 # VS Code
 .vscode/
+
+# Postman
+postman/
+.postman/
