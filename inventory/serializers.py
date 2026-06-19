@@ -14,6 +14,14 @@ class SaleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sale
         fields = "__all__"
+        read_only_fields = ["selling_price", "sale_date"]
+
+    def validate_quantity(self, value):
+        if value <= 0:
+            raise serializers.ValidationError(
+                "Quantity must be greater than zero."
+            )
+        return value
 
     @transaction.atomic
     def create(self, validated_data):
@@ -27,6 +35,24 @@ class SaleSerializer(serializers.ModelSerializer):
 
         product.quantity -= quantity
         product.save()
+
+        return Sale.objects.create(**validated_data)
+
+
+
+    @transaction.atomic
+    def create(self, validated_data):
+        product = validated_data["product"]
+        quantity = validated_data["quantity"]
+
+        if product.quantity < quantity:
+            raise serializers.ValidationError(
+                "Not enough stock available."
+            )
+
+        product.quantity -= quantity
+        product.save()
+        validated_data["selling_price"] = product.selling_price
 
         sale = Sale.objects.create(**validated_data)
 

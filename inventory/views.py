@@ -1,8 +1,12 @@
-from .models import Product
-from .serializers import ProductSerializer
 
 from .models import Product, Supplier, Category, Customer, Sale
-from .serializers import ProductSerializer, SupplierSerializer, CategorySerializer, CustomerSerializer,SaleSerializer
+from .serializers import (
+    ProductSerializer, 
+    SupplierSerializer, 
+    CategorySerializer, 
+    CustomerSerializer, 
+    SaleSerializer,
+)
 
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
@@ -28,6 +32,9 @@ class SaleViewSet(ModelViewSet):
 
 
 
+
+
+
 class CustomerViewSet(ModelViewSet):
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
@@ -39,21 +46,24 @@ class CustomerViewSet(ModelViewSet):
 class CategoryViewSet(ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 
 class SupplierViewSet(ModelViewSet):
     queryset = Supplier.objects.all()
     serializer_class = SupplierSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 # Product List View, Create Product
 class ProductViewSet(ModelViewSet):
 
     permission_classes = [IsAuthenticatedOrReadOnly]
 
-    queryset = Product.objects.select_related(
-        "category",
-        "supplier"
+    queryset = (
+        Product.objects
+        .select_related("category", "supplier")
+        .all()
     )
 
     serializer_class = ProductSerializer
