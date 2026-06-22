@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from django.db import transaction
 from django.shortcuts import get_object_or_404, render, redirect
+from .pagination import ProductPagination
 
 from .forms import (
     ProductForm,
@@ -116,6 +117,8 @@ class ProductViewSet(ModelViewSet):
     ]
 
     ordering = ["-created_at"]
+
+    pagination_class = ProductPagination
 
 
 
