@@ -84,11 +84,7 @@ Manage Users
 Access Django Admin Panel
 View Dashboard
 
-Manager:
 
-Login Credentials:
-Username: manager
-Password: pass@123
 
 Manager Features:
 
@@ -104,11 +100,7 @@ View Sales
 Create Sales
 
 
-Sales Staff:
 
-Login Credentials
-Username: sales
-Password: pass@123
 
 Sales Features:
 
